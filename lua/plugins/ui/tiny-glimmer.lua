@@ -1,7 +1,7 @@
 vim.pack.add{ 'https://github.com/rachartier/tiny-glimmer.nvim' }
 require("tiny-glimmer").setup({
     disable_warnings = true,
-    autoreload = true,
+    autoreload = false,
 
     -- Animation refresh rate in milliseconds
     refresh_interval_ms = 8,
@@ -169,4 +169,13 @@ require("tiny-glimmer").setup({
     virt_text = {
         priority = 2048,  -- Higher values appear above other plugins
     },
+})
+
+-- silently reapply highlights when the palette changes
+vim.api.nvim_create_autocmd("ColorScheme", {
+    group = vim.api.nvim_create_augroup("TinyGlimmerSilentReload", { clear = true }),
+    desc = "Re-resolve highlight groups on colorscheme change.",
+    callback = function()
+        require("tiny-glimmer").apply()
+    end,
 })
