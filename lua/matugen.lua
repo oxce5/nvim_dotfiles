@@ -3,21 +3,21 @@
 function M.setup()
   require('base16-colorscheme').setup({
     base00 = '#131318',
-    base01 = '#1f1f25',
+    base01 = '#201f25',
     base02 = '#2a292f',
-    base03 = '#918f9a',
+    base03 = '#928f99',
     base04 = '#c8c5d0',
     base05 = '#e5e1e9',
     base06 = '#e5e1e9',
     base07 = '#e5e1e9',
     base08 = '#ffb4ab',
-    base09 = '#eab9d2',
-    base0A = '#c6c4dd',
-    base0B = '#c2c1ff',
-    base0C = '#eab9d2',
-    base0D = '#c2c1ff',
-    base0E = '#c6c4dd',
-    base0F = '#e3e0f9',
+    base09 = '#ebb9d0',
+    base0A = '#c7c4dc',
+    base0B = '#c5c0ff',
+    base0C = '#ebb9d0',
+    base0D = '#c5c0ff',
+    base0E = '#c7c4dc',
+    base0F = '#e4dff9',
   })
 
   local hi = function(group, opts)
@@ -26,32 +26,27 @@ function M.setup()
 
   -- telescope.nvim
   hi('TelescopeNormal',         { fg = '#e5e1e9',          bg = '#131318' })
-  hi('TelescopeBorder',         { fg = '#918f9a',             bg = '#131318' })
+  hi('TelescopeBorder',         { fg = '#928f99',             bg = '#131318' })
   hi('TelescopePromptNormal',   { fg = '#e5e1e9',          bg = '#131318' })
-  hi('TelescopePromptBorder',   { fg = '#918f9a',             bg = '#131318' })
-  hi('TelescopePromptPrefix',   { fg = '#c2c1ff',             bg = '#131318' })
+  hi('TelescopePromptBorder',   { fg = '#928f99',             bg = '#131318' })
+  hi('TelescopePromptPrefix',   { fg = '#c5c0ff',             bg = '#131318' })
   hi('TelescopePromptCounter',  { fg = '#c8c5d0',  bg = '#131318' })
-  hi('TelescopePromptTitle',    { fg = '#131318',             bg = '#c2c1ff' })
-  hi('TelescopePreviewTitle',   { fg = '#131318',             bg = '#c6c4dd' })
-  hi('TelescopeResultsTitle',   { fg = '#131318',             bg = '#eab9d2' })
+  hi('TelescopePromptTitle',    { fg = '#131318',             bg = '#c5c0ff' })
+  hi('TelescopePreviewTitle',   { fg = '#131318',             bg = '#c7c4dc' })
+  hi('TelescopeResultsTitle',   { fg = '#131318',             bg = '#ebb9d0' })
   hi('TelescopeSelection',      { fg = '#e5e1e9',          bg = '#2a292f' })
-  hi('TelescopeSelectionCaret', { fg = '#c2c1ff',             bg = '#2a292f' })
-  hi('TelescopeMatching',       { fg = '#c2c1ff',             bold = true })
+  hi('TelescopeSelectionCaret', { fg = '#c5c0ff',             bg = '#2a292f' })
+  hi('TelescopeMatching',       { fg = '#c5c0ff',             bold = true })
 
   -- mini.pick
   hi('MiniPickNormal',         { fg = '#e5e1e9',          bg = '#131318' })
-  hi('MiniPickBorder',         { fg = '#918f9a',             bg = '#131318' })
+  hi('MiniPickBorder',         { fg = '#928f99',             bg = '#131318' })
   hi('MiniPickPrompt',   { fg = '#e5e1e9',          bg = '#131318' })
-  hi('MiniPickPromptPrefix',   { fg = '#c2c1ff',             bg = '#131318' })
-  hi('MiniPickBorderText',    { fg = '#131318',             bg = '#c2c1ff' })
+  hi('MiniPickPromptPrefix',   { fg = '#c5c0ff',             bg = '#131318' })
+  hi('MiniPickBorderText',    { fg = '#131318',             bg = '#c5c0ff' })
   hi('MiniPickMatchCurrent',      { fg = '#e5e1e9',          bg = '#2a292f' })
-  hi('MiniPickPromptCaret', { fg = '#c2c1ff',             bg = '#2a292f' })
-  hi('MiniPickMatchRanges',       { fg = '#c2c1ff',             bold = true })
-
-  -- base16-colorscheme now exports the palette as vim.g.base16_gui00..0F.
-  -- Plugins that snapshot colors at setup time (lualine) must rebuild; they
-  -- already listen for ColorScheme.
-  vim.api.nvim_exec_autocmds('ColorScheme', { modeline = false })
+  hi('MiniPickPromptCaret', { fg = '#c5c0ff',             bg = '#2a292f' })
+  hi('MiniPickMatchRanges',       { fg = '#c5c0ff',             bold = true })
 end
 
 -- Register a signal handler for SIGUSR1 (matugen updates).
