@@ -98,6 +98,19 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+local nixd_dirs = {
+  vim.fs.normalize '~/Projects/chimera',
+  vim.fs.normalize '~/Projects/chimera-pkgs',
+}
+
+-- Returns the matching nixd project dir for a buffer, or nil
+local function nixd_dir_for(bufnr)
+  local fname = vim.fs.normalize(vim.api.nvim_buf_get_name(bufnr)) .. '/'
+  for _, dir in ipairs(nixd_dirs) do
+    if vim.startswith(fname, dir .. '/') then return dir end
+  end
+end
+
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 --  See `:help lsp-config` for information about keys and how to configure
@@ -117,6 +130,40 @@ local servers = {
   -- ts_ls = {},
 
   stylua = {}, -- Used to format Lua code
+
+  nil_ls = {
+    root_dir = function(bufnr, on_dir)
+      if nixd_dir_for(bufnr) then return end -- nixd territory, don't attach
+      on_dir(vim.fs.root(bufnr, { 'flake.nix', '.git' }) or vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
+    end,
+    settings = {
+      ['nil'] = {
+        formatting = { command = { 'alejandra', '--quiet', '-' } },
+      },
+    },
+  },
+
+  nixd = {
+    root_dir = function(bufnr, on_dir)
+      local dir = nixd_dir_for(bufnr)
+      if dir then on_dir(dir) end
+    end,
+    settings = {
+      nixd = {
+        nixpkgs = {
+          expr = 'import (builtins.getFlake "/home/oxce5/Projects/chimera").inputs.nixpkgs { }',
+        },
+        options = {
+          nixos = {
+            expr = '(builtins.getFlake "/home/oxce5/Projects/chimera").nixosConfigurations.overlord.options',
+          },
+          home_manager = {
+            expr = '(builtins.getFlake "/home/oxce5/Projects/chimera").homeConfigurations."oxce5@overlord".options',
+          },
+        },
+      },
+    },
+  },
 
   -- Special Lua Config, as recommended by neovim help docs
   lua_ls = {
