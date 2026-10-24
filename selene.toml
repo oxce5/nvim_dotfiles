@@ -1,0 +1,9 @@
+std = "vim"
+
+[lints]
+mixed_table = "allow"
+shadowing = "allow"
+unused_variable = "warn"
+empty_if = "allow"
+multiple_statements = "allow"
+if_same_then_else = "allow"
