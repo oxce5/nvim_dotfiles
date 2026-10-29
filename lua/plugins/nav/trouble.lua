@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+local gh = require('util').gh
 
 -- trouble.nvim - better diagnostics list and others
 vim.pack.add { gh 'folke/trouble.nvim' }

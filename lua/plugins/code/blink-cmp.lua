@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+local gh = require('util').gh
 
 -- [[ Snippet Engine ]]
 

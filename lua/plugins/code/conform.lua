@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+local gh = require('util').gh
 
 -- [[ Formatting ]]
 vim.pack.add { gh 'stevearc/conform.nvim' }
@@ -7,6 +7,7 @@ require('conform').setup {
   format_on_save = function(bufnr)
     -- You can specify filetypes to autoformat on save here:
     local enabled_filetypes = {
+      nix = true,
       -- lua = true,
       -- python = true,
     }
@@ -21,6 +22,7 @@ require('conform').setup {
   },
   -- You can also specify external formatters in here.
   formatters_by_ft = {
+    nix = { 'alejandra' },
     -- rust = { 'rustfmt' },
     -- Conform can also run multiple formatters sequentially
     -- python = { "isort", "black" },
@@ -30,6 +32,7 @@ require('conform').setup {
   },
 }
 
-vim.keymap.set({ 'n', 'v' }, '<leader>f', function() require('conform').format { async = true } end, { desc = '[F]ormat buffer' })
+-- <leader>c = Code (which-key group)
+vim.keymap.set({ 'n', 'v' }, '<leader>cf', function() require('conform').format { async = true } end, { desc = 'Format Buffer' })
 
 -- vim: ts=2 sts=2 sw=2 et

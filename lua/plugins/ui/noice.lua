@@ -62,9 +62,7 @@ vim.api.nvim_create_autocmd('ColorScheme', {
   group = vim.api.nvim_create_augroup('NoiceMatugen', { clear = true }),
   desc = 'Tint noice with the matugen palette.',
   callback = function()
-    local hl = function(group, opts)
-      vim.api.nvim_set_hl(0, group, opts)
-    end
+    local hl = function(group, opts) vim.api.nvim_set_hl(0, group, opts) end
     local fg, bg = base('05', '#d0d0d0'), base('00', '#202328')
     local border, muted = base('03', '#6c7086'), base('04', '#bbc2cf')
 

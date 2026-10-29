@@ -5,6 +5,10 @@
       "src": "https://github.com/L3MON4D3/LuaSnip",
       "version": "2.0.0 - 3.0.0"
     },
+    "R.nvim": {
+      "rev": "0cfd62ac84505cd33b96949d083214f30cd040e3",
+      "src": "https://github.com/R-nvim/R.nvim"
+    },
     "base16-nvim": {
       "rev": "cf82c4be16334c7cdf9883296eacfba50ff93b26",
       "src": "https://github.com/RRethy/base16-nvim"

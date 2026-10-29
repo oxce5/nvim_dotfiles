@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+local gh = require('util').gh
 
 -- flash.nvim - jump labels for search/motions
 vim.pack.add { gh 'folke/flash.nvim' }

@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+local gh = require('util').gh
 
 -- grug-far.nvim - search and replace in multiple files
 vim.pack.add { gh 'MagicDuck/grug-far.nvim' }

@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+local gh = require('util').gh
 
 -- [[ LSP Configuration ]]
 -- Brief aside: **What is LSP?**
@@ -21,7 +21,7 @@ local function gh(repo) return 'https://github.com/' .. repo end
 --  - and more!
 --
 -- Thus, Language Servers are external tools that must be installed separately from
--- Neovim. This is where `mason` and related plugins come into play.
+-- Neovim. On this machine they are installed via Nix and expected on $PATH.
 --
 -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
 -- and elegantly composed help section, `:help lsp-vs-treesitter`
@@ -60,9 +60,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
 
     -- Inlay hints
-    if client:supports_method('textDocument/inlayHint', event.buf) then
-      vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
-    end
+    if client:supports_method('textDocument/inlayHint', event.buf) then vim.lsp.inlay_hint.enable(true, { bufnr = event.buf }) end
   end,
 })
 
@@ -80,7 +78,7 @@ local function nixd_dir_for(bufnr)
 end
 
 -- Enable the following language servers
---  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
+--  Feel free to add/remove any LSPs that you want here. They must be on $PATH (Nix).
 --  See `:help lsp-config` for information about keys and how to configure
 ---@type table<string, vim.lsp.Config>
 local servers = {
@@ -168,83 +166,8 @@ local servers = {
   },
 }
 
--- [[ Java / jdtls ]]
-vim.pack.add {
-  'https://github.com/mfussenegger/nvim-jdtls',
-}
-
--- Fill these in with wherever you cloned/built java-debug and vscode-java-test.
--- java-debug:       https://github.com/microsoft/java-debug  (build with ./mvnw clean install)
--- vscode-java-test: https://github.com/microsoft/vscode-java-test (build with npm install && npm run build-plugin)
-local JAVA_DEBUG_JAR = vim.fn.glob(vim.fn.expand '~/dev/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar')
-local JAVA_TEST_JARS = vim.split(vim.fn.glob(vim.fn.expand '~/dev/vscode-java-test/server/*.jar', true), '\n')
-
-local function setup_jdtls()
-  local jdtls = require 'jdtls'
-
-  local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
-  local workspace_dir = vim.fn.stdpath 'data' .. '/jdtls-workspace/' .. project_name
-
-  local bundles = { JAVA_DEBUG_JAR }
-  vim.list_extend(bundles, JAVA_TEST_JARS)
-
-  local config = {
-    cmd = { 'jdtls', '-data', workspace_dir },
-
-    root_dir = require('jdtls.setup').find_root { '.git', 'mvnw', 'gradlew', 'pom.xml', 'build.gradle' },
-
-    settings = {
-      java = {
-        eclipse = { downloadSources = true },
-        configuration = { updateBuildConfiguration = 'interactive' },
-        maven = { downloadSources = true },
-        implementationsCodeLens = { enabled = true },
-        referencesCodeLens = { enabled = true },
-        references = { includeDecompiledSources = true },
-        format = { enabled = true },
-        signatureHelp = { enabled = true },
-        completion = {
-          favoriteStaticMembers = {
-            'org.junit.Assert.*', 'org.junit.jupiter.api.Assertions.*',
-            'org.mockito.Mockito.*',
-          },
-        },
-        inlayHints = { parameterNames = { enabled = 'all' } },
-      },
-    },
-
-    init_options = {
-      bundles = bundles,
-      extendedClientCapabilities = jdtls.extendedClientCapabilities,
-    },
-
-    on_attach = function(_, bufnr)
-      -- Registers the Java debug adapter with the nvim-dap instance
-      -- that debug.lua already configured (dap.continue / <F5> etc. just work).
-      jdtls.setup_dap { hotcodereplace = 'auto' }
-      require('jdtls.dap').setup_dap_main_class_configs()
-
-      local opts = { buffer = bufnr }
-      vim.keymap.set('n', '<leader>co', jdtls.organize_imports, opts)
-      vim.keymap.set('n', 'crv', jdtls.extract_variable, opts)
-      vim.keymap.set('v', 'crv', function() jdtls.extract_variable(true) end, opts)
-      vim.keymap.set('n', 'crc', jdtls.extract_constant, opts)
-      vim.keymap.set('v', 'crc', function() jdtls.extract_constant(true) end, opts)
-      vim.keymap.set('v', 'crm', function() jdtls.extract_method(true) end, opts)
-      vim.keymap.set('n', '<leader>df', jdtls.test_class, opts)
-      vim.keymap.set('n', '<leader>dn', jdtls.test_nearest_method, opts)
-      vim.keymap.set('n', '<leader>tu', jdtls.update_project_config, opts)
-    end,
-  }
-
-  jdtls.start_or_attach(config)
-end
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'java',
-  group = vim.api.nvim_create_augroup('kickstart-jdtls', { clear = true }),
-  callback = setup_jdtls,
-})
+-- Languages that manage their own LSP lifecycle (e.g. Java via nvim-jdtls)
+-- live in sibling files in this directory, not here.
 
 vim.pack.add {
   gh 'neovim/nvim-lspconfig',

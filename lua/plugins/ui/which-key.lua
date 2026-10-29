@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+local gh = require('util').gh
 
 -- Useful plugin to show you pending keybinds.
 vim.pack.add { gh 'folke/which-key.nvim' }

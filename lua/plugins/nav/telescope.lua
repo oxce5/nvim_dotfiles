@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+local gh = require('util').gh
 
 -- [[ Fuzzy Finder (files, lsp, etc) ]]
 vim.pack.add {
@@ -36,11 +36,9 @@ map('n', '<leader><leader>', builtin.buffers, { desc = 'Find Buffers' })
 -- <leader>s - Search
 map({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = 'Search Word' })
 map('n', '<leader>sd', builtin.diagnostics, { desc = 'Search Diagnostics' })
-map('n', '<leader>sr', builtin.resume, { desc = 'Resume Search' })
+map('n', '<leader>sR', builtin.resume, { desc = 'Resume Search' })
 map('n', '<leader>s.', builtin.oldfiles, { desc = 'Recent Files' })
-map('n', '<leader>s/', function()
-  builtin.live_grep { grep_open_files = true, prompt_title = 'Live Grep in Open Files' }
-end, { desc = 'Grep in Open Files' })
+map('n', '<leader>s/', function() builtin.live_grep { grep_open_files = true, prompt_title = 'Live Grep in Open Files' } end, { desc = 'Grep in Open Files' })
 map('n', '<leader>sc', builtin.commands, { desc = 'Commands' })
 map('n', '<leader>sk', builtin.keymaps, { desc = 'Keymaps' })
 
@@ -65,8 +63,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 -- Buffer fuzzy find
-map('n', '<leader>/', function()
-  builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown { winblend = 10, previewer = false })
-end, { desc = 'Search in Buffer' })
+map(
+  'n',
+  '<leader>/',
+  function() builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown { winblend = 10, previewer = false }) end,
+  { desc = 'Search in Buffer' }
+)
 
 -- vim: ts=2 sts=2 sw=2 et

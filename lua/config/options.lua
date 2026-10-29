@@ -78,8 +78,28 @@ vim.o.cursorline = true
 vim.o.scrolloff = 10
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
--- instead raise a dialog asking if you wish to save the current file(s)
+-- instead raise a dialog asking you if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+-- [[ Diagnostic Config ]]
+--  See `:help vim.diagnostic.Opts`
+vim.diagnostic.config {
+  update_in_insert = false,
+  severity_sort = true,
+  float = { border = 'rounded', source = 'if_many' },
+  underline = { severity = { min = vim.diagnostic.severity.WARN } },
+  virtual_text = true,
+  virtual_lines = false,
+  jump = {
+    on_jump = function(_, bufnr)
+      vim.diagnostic.open_float {
+        bufnr = bufnr,
+        scope = 'cursor',
+        focus = false,
+      }
+    end,
+  },
+}
 
 -- vim: ts=2 sts=2 sw=2 et

@@ -1,23 +1,19 @@
 -- [[ Intro to `vim.pack` ]]
--- `vim.pack` is a new plugin manager built into Neovim,
---  which provides a Lua interface for installing and managing plugins.
+-- `vim.pack` is a plugin manager built into Neovim which provides
+-- a Lua interface for installing and managing plugins.
 --
---  See `:help vim.pack`, `:help vim.pack-examples` or the
---  excellent blog post from the creator of vim.pack and mini.nvim:
---  https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack
+-- See `:help vim.pack`, `:help vim.pack-examples` or the
+-- excellent blog post from the creator of vim.pack and mini.nvim:
+-- https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack
 --
---  To inspect plugin state and pending updates, run
---    :lua vim.pack.update(nil, { offline = true })
+-- To inspect plugin state and pending updates, run
+--   :lua vim.pack.update(nil, { offline = true })
 --
---  To update plugins, run
---    :lua vim.pack.update()
+-- To update plugins, run
+--   :lua vim.pack.update()
 --
---
---  Throughout the rest of the config there will be examples
---  of how to install and configure plugins using `vim.pack`.
---
---  In this section we set up some autocommands to run build
---  steps for certain plugins after they are installed or updated.
+-- Plugins are declared per-feature in lua/plugins/**; this file only
+-- registers build steps that must run after install/update.
 
 local function run_build(name, cmd, cwd)
   local result = vim.system(cmd, { cwd = cwd }):wait()
@@ -57,15 +53,5 @@ vim.api.nvim_create_autocmd('PackChanged', {
     end
   end,
 })
-
--- Iterate over all Lua files in the plugins directory and load them
-local plugins_dir = vim.fs.joinpath(vim.fn.stdpath 'config', 'lua', 'plugins')
-for file_name, type in vim.fs.dir(plugins_dir, { follow = true }) do
-  if (type == 'file' or type == 'link') and file_name:match '%.lua$' and file_name ~= 'init.lua' then
-    local module = file_name:gsub('%.lua$', '')
-    require('plugins.' .. module)
-  end
-end
-
 
 -- vim: ts=2 sts=2 sw=2 et

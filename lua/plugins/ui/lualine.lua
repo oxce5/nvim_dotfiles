@@ -1,12 +1,10 @@
-vim.pack.add({
-    'https://github.com/nvim-tree/nvim-web-devicons',
-    'https://github.com/nvim-lualine/lualine.nvim'
-})
+-- Icons come from mini.icons (mocks nvim-web-devicons), set up in plugins/code/mini.lua
+vim.pack.add { 'https://github.com/nvim-lualine/lualine.nvim' }
 
 -- Eviline config for lualine
 -- Author: shadmansaleh
 -- Credit: glepnir
-local lualine = require('lualine')
+local lualine = require 'lualine'
 
 local fallback = {
   base00 = '#202328',
@@ -24,49 +22,39 @@ local fallback = {
   base0F = '#a9a1e1',
 }
 
-local function base(index)
-  return vim.g['base16_gui' .. index] or fallback['base' .. index]
-end
+local function base(index) return vim.g['base16_gui' .. index] or fallback['base' .. index] end
 
 -- lualine re-evaluates these on every statusline refresh
 local function fg(index, gui)
-  return function()
-    return { fg = base(index), gui = gui }
-  end
+  return function() return { fg = base(index), gui = gui } end
 end
 
 local colors = {
-  blue    = fg('0D'),
-  cyan    = fg('0C'),
-  dim     = fg('04'),
-  fg      = fg('05', 'bold'),
-  green   = fg('0B'),
-  light   = fg('07'),
-  magenta = fg('0F'),
-  orange  = fg('09'),
-  red     = fg('08'),
-  violet  = fg('0E'),
-  yellow  = fg('0A'),
+  blue = fg '0D',
+  cyan = fg '0C',
+  dim = fg '04',
+  fg = fg('05', 'bold'),
+  green = fg '0B',
+  light = fg '07',
+  magenta = fg '0F',
+  orange = fg '09',
+  red = fg '08',
+  violet = fg '0E',
+  yellow = fg '0A',
 }
 
 local conditions = {
-  buffer_not_empty = function()
-    return vim.fn.empty(vim.fn.expand('%:t')) ~= 1
-  end,
-  hide_in_width = function()
-    return vim.fn.winwidth(0) > 80
-  end,
+  buffer_not_empty = function() return vim.fn.empty(vim.fn.expand '%:t') ~= 1 end,
+  hide_in_width = function() return vim.fn.winwidth(0) > 80 end,
   check_git_workspace = function()
-    local filepath = vim.fn.expand('%:p:h')
+    local filepath = vim.fn.expand '%:p:h'
     local gitdir = vim.fn.finddir('.git', filepath .. ';')
     return gitdir and #gitdir > 0 and #gitdir < #filepath
   end,
 }
 
 local function section_color(fg_index, bg_index, gui)
-  return function()
-    return { fg = base(fg_index), bg = base(bg_index), gui = gui }
-  end
+  return function() return { fg = base(fg_index), bg = base(bg_index), gui = gui } end
 end
 
 local theme = {}
@@ -113,28 +101,20 @@ local config = {
 }
 
 -- Inserts a component in lualine_c at left section
-local function ins_left(component)
-  table.insert(config.sections.lualine_c, component)
-end
+local function ins_left(component) table.insert(config.sections.lualine_c, component) end
 
 -- Inserts a component in lualine_x at right section
-local function ins_right(component)
-  table.insert(config.sections.lualine_x, component)
-end
+local function ins_right(component) table.insert(config.sections.lualine_x, component) end
 
 ins_left {
-  function()
-    return '▊'
-  end,
+  function() return '▊' end,
   color = colors.blue, -- Sets highlighting of component
   padding = { left = 0, right = 1 }, -- We don't need space before this
 }
 
 ins_left {
   -- mode component
-  function()
-    return ''
-  end,
+  function() return '' end,
   color = function()
     local mode_color = {
       n = '#ec5f67',
@@ -184,19 +164,17 @@ ins_left {
   sources = { 'nvim_diagnostic' },
   symbols = { error = ' ', warn = ' ', info = ' ' },
   diagnostics_color = {
-    error = fg('08'),
-    warn = fg('0A'),
-    info = fg('0D'),
-    hint = fg('0C'),
+    error = fg '08',
+    warn = fg '0A',
+    info = fg '0D',
+    hint = fg '0C',
   },
 }
 
 -- Insert mid section. You can make any number of sections in neovim :)
 -- for lualine it's any number greater then 2
 ins_left {
-  function()
-    return '%='
-  end,
+  function() return '%=' end,
 }
 
 ins_left {
@@ -205,14 +183,10 @@ ins_left {
     local msg = 'No Active Lsp'
     local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = 0 })
     local clients = vim.lsp.get_clients()
-    if next(clients) == nil then
-      return msg
-    end
+    if next(clients) == nil then return msg end
     for _, client in ipairs(clients) do
       local filetypes = client.config.filetypes
-      if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-        return client.name
-      end
+      if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then return client.name end
     end
     return msg
   end,
@@ -246,17 +220,15 @@ ins_right {
   -- Is it me or the symbol for modified us really weird
   symbols = { added = ' ', modified = '󰝤 ', removed = ' ' },
   diff_color = {
-    added = fg('0B'),
-    modified = fg('09'),
-    removed = fg('08'),
+    added = fg '0B',
+    modified = fg '09',
+    removed = fg '08',
   },
   cond = conditions.hide_in_width,
 }
 
 ins_right {
-  function()
-    return '▊'
-  end,
+  function() return '▊' end,
   color = colors.blue,
   padding = { left = 1 },
 }

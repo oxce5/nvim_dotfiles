@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+local gh = require('util').gh
 
 -- [[ mini.nvim ]]
 --  A collection of various small independent plugins/modules
@@ -32,5 +32,14 @@ require('mini.ai').setup {
 -- - sd'   - [S]urround [D]elete [']quotes
 -- - sr)'  - [S]urround [R]eplace [)] [']
 require('mini.surround').setup()
+
+-- Auto pairs for brackets, quotes, etc. (bundled with mini.nvim)
+require('mini.pairs').setup {
+  modes = { insert = true, command = true, terminal = false },
+  skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
+  skip_ts = { 'string' },
+  skip_unbalanced = true,
+  markdown = true,
+}
 
 -- vim: ts=2 sts=2 sw=2 et

@@ -1,4 +1,4 @@
-local function gh(repo) return 'https://github.com/' .. repo end
+local gh = require('util').gh
 
 -- Highlight todo, notes, etc in comments
 vim.pack.add { gh 'folke/todo-comments.nvim' }
