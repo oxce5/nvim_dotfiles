@@ -14,6 +14,14 @@ local gh = require('util').gh
 -- We first install it from https://github.com/NMAC427/guess-indent.nvim
 -- and then call its `setup()` function to start it with default settings.
 vim.pack.add { gh 'NMAC427/guess-indent.nvim' }
-require('guess-indent').setup {}
+require('guess-indent').setup {
+  -- We're a strict 2-space (expandtab) setup, so never let detection switch a
+  -- buffer to hard tabs. Default on_tab_options sets expandtab=false, which
+  -- made tab-indented files (e.g. Java) keep producing \t bytes — those render
+  -- as 8 cols in `cat`/yank regardless of 'tabstop'. With {} a detected-tab
+  -- file just keeps the global expandtab/shiftwidth; detection still applies
+  -- the *width* for space-indented files via on_space_options.
+  on_tab_options = {},
+}
 
 -- vim: ts=2 sts=2 sw=2 et

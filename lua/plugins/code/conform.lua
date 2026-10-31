@@ -8,6 +8,7 @@ require('conform').setup {
     -- You can specify filetypes to autoformat on save here:
     local enabled_filetypes = {
       nix = true,
+      java = true, -- formatted by google-java-format (forces 2-space, matches global)
       -- lua = true,
       -- python = true,
     }
@@ -23,6 +24,9 @@ require('conform').setup {
   -- You can also specify external formatters in here.
   formatters_by_ft = {
     nix = { 'alejandra' },
+    -- google-java-format is Nix-managed (on $PATH). It hardcodes 2-space
+    -- indentation regardless of 'tabstop', which matches the global setting.
+    java = { 'google-java-format' },
     -- rust = { 'rustfmt' },
     -- Conform can also run multiple formatters sequentially
     -- python = { "isort", "black" },

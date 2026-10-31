@@ -79,7 +79,9 @@ end
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'java',
-  group = vim.api.nvim_create_augroup('jdtls', { clear = true }),
+  -- NOTE: nvim-jdtls uses an augroup named "jdtls" for its own jdt:// buffers
+  -- and clears it on load. Use a distinct name here so we don't wipe each other.
+  group = vim.api.nvim_create_augroup('jdtls-java', { clear = true }),
   callback = setup_jdtls,
 })
 

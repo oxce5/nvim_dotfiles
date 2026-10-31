@@ -36,6 +36,17 @@ vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 -- Enable break indent
 vim.o.breakindent = true
 
+-- Indentation: 2 spaces everywhere.
+--
+-- Without this every buffer falls back to Neovim's defaults (tabstop=8,
+-- shiftwidth=0 → 8, no expandtab), which is why new/undetected files (e.g.
+-- Java) showed 8. guess-indent still overrides per-file when it detects an
+-- existing style; this only sets the fallback for new and undetected buffers.
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+vim.o.softtabstop = 2
+vim.o.expandtab = true
+
 -- Enable undo/redo changes even after closing and reopening a file
 vim.o.undofile = true
 vim.o.swapfile = false
@@ -66,7 +77,7 @@ vim.o.splitbelow = true
 --   See `:help lua-options`
 --   and `:help lua-guide-options`
 vim.o.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = '│ ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'

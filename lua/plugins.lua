@@ -36,6 +36,7 @@ require 'plugins.nav.telescope'
 require 'plugins.nav.flash'
 require 'plugins.nav.trouble'
 require 'plugins.nav.grug-far'
+require 'plugins.nav.precognition'
 require 'plugins.nav.neo-tree'
 
 -- UI (base16 must be installed before matugen.setup() runs in init.lua)
@@ -43,6 +44,7 @@ require 'plugins.ui.base16'
 require 'plugins.ui.which-key'
 require 'plugins.ui.noice'
 require 'plugins.ui.lualine'
+require 'plugins.ui.rainbow-delimiters' -- defines Rainbow* groups used by indent-line scope
 require 'plugins.ui.indent-line'
 require 'plugins.ui.todo-comments'
 require 'plugins.ui.tiny-glimmer'

@@ -45,6 +45,12 @@ function M.setup()
   hi('MiniPickMatchCurrent', { fg = '#e5e1e9', bg = '#2a292f' })
   hi('MiniPickPromptCaret', { fg = '#c5c0ff', bg = '#2a292f' })
   hi('MiniPickMatchRanges', { fg = '#c5c0ff', bold = true })
+
+  -- base16-nvim doesn't emit ColorScheme, so consumers that build their
+  -- highlights from the palette (indent-blankline rainbow indents, noice,
+  -- tiny-glimmer, ...) would never re-derive. Emit it ourselves — on first
+  -- load and on every SIGUSR1 reload — so they pick up the new palette.
+  vim.api.nvim_exec_autocmds('ColorScheme', { pattern = 'base16', modeline = false })
 end
 
 -- Register a signal handler for SIGUSR1 (matugen updates).
