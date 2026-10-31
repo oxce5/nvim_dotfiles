@@ -29,12 +29,13 @@ require 'plugins.code.treesitter' -- nvim-treesitter (main) doesn't support lazy
 require 'plugins.code.debug'
 require 'plugins.nav.neo-tree' -- also handles `nvim <dir>`
 
--- [[ First buffer: BufReadPre / BufNewFile ]]
+-- [[ First buffer or first edit: BufReadPre / BufNewFile / InsertEnter ]]
+-- InsertEnter covers an unnamed/scratch buffer: the editing stack is ready
+-- once you start typing, even if no file was opened.
 -- blink.cmp goes before lspconfig so servers start with its capabilities.
--- The LSP modules register FileType autocmds themselves, so they must load
--- before the first FileType; telescope wires buffer-local maps via LspAttach,
--- so it must load before a server attaches.
-lazy.event({ 'BufReadPre', 'BufNewFile' }, {
+-- telescope wires buffer-local maps via LspAttach, so it must load before a server attaches.
+-- The LSP modules register FileType autocmds themselves, so they must load before the first FileType.
+lazy.event({ 'BufReadPre', 'BufNewFile', 'InsertEnter' }, {
   'plugins.code.blink-cmp',
   'plugins.lsp.lspconfig',
   'plugins.lsp.jdtls', -- self-managed LSP (Java)
@@ -53,6 +54,8 @@ lazy.event({ 'BufReadPre', 'BufNewFile' }, {
 -- [[ Idle: right after startup, once VimEnter has fired ]]
 -- These define many keymaps inside their own module, so a command trigger
 -- would lose them until first use. Loading just after startup keeps them.
+-- telescope must load before LSP attaches (LspAttach in telescope.lua),
+-- so load it in the same group (first-buffer).
 lazy.idle {
   'plugins.nav.flash',
   'plugins.nav.trouble',
